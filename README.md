@@ -16,7 +16,12 @@ Construct a new Harvest client, then use the client to access the Harvest API.
 
 ```go
 apiClient := harvest.NewAPIClientWithBasicAuth("YOUR_USERNAME", "YOUR_PASSWORD", "YOUR_SUBDOMAIN")
-clients := apiClient.GetClients()
+
+clients := apiClient.Client.List()
+client := apiClient.Client.Find(123123)
+
+people := apiClient.People.List()
+person := apiClient.People.Find(123123)
 ```
 
 ## License

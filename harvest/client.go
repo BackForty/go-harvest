@@ -6,6 +6,10 @@ import (
 	"time"
 )
 
+type ClientService struct {
+	apiClient *APIClient
+}
+
 type Client struct {
 	Name                    string    `json:"name"`
 	Currency                string    `json:"currency"`
@@ -23,8 +27,11 @@ type ClientResponse struct {
 	Client Client
 }
 
-func GetClients(apiClient *APIClient) (clients []Client) {
-	contents := apiClient.GetJSON("/clients.json")
+func (c *ClientService) List() (err error, clients []Client) {
+	err, contents := c.apiClient.GetJSON("/clients.json")
+	if err != nil {
+		return
+	}
 
 	var clientResponse []ClientResponse
 	json.Unmarshal(contents, &clientResponse)
@@ -34,11 +41,15 @@ func GetClients(apiClient *APIClient) (clients []Client) {
 	return
 }
 
-func GetClient(clientID int, apiClient *APIClient) Client {
+func (c *ClientService) Find(clientID int) (err error, client Client) {
 	resourceURL := fmt.Sprintf("/clients/%v.json", clientID)
-	contents := apiClient.GetJSON(resourceURL)
+	err, contents := c.apiClient.GetJSON(resourceURL)
+	if err != nil {
+		return
+	}
 
 	var clientResponse ClientResponse
 	json.Unmarshal(contents, &clientResponse)
-	return clientResponse.Client
+	client = clientResponse.Client
+	return
 }

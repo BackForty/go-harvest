@@ -6,11 +6,33 @@ import (
 )
 
 func main() {
-  apiClient := harvest.NewAPIClientWithBasicAuth("YOUR_USERNAME", "YOUR_PASSWORD", "YOUR_SUBDOMAIN")
-  clients := apiClient.GetClients()
+	apiClient := harvest.NewAPIClientWithBasicAuth(
+		"YOUR_USERNAME",
+		"YOUR_PASSWORD",
+		"YOUR_SUBDOMAIN")
 
-  fmt.Printf("%+v\n\n\n", clients)
+	err, clients := apiClient.Client.List()
+	if err != nil {
+		fmt.Printf("error getting clients")
+	}
 
-  client := apiClient.GetClient(clients[0].Id)
-  fmt.Printf("%v\n\n\n", client)
+	fmt.Printf("%+v\n\n\n", clients)
+
+	err, client := apiClient.Client.Find(clients[0].Id)
+	if err != nil {
+		fmt.Printf("error getting individual client")
+	}
+	fmt.Printf("%v\n\n\n", client)
+
+	err, people := apiClient.People.List()
+	if err != nil {
+		fmt.Printf("error getting people listing")
+	}
+	fmt.Printf("%+v\n\n\n", people)
+
+	err, person := apiClient.People.Find(people[0].Id)
+	if err != nil {
+		fmt.Printf("error getting individual person")
+	}
+	fmt.Printf("%v\n\n\n", person)
 }

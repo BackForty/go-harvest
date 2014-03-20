@@ -7,17 +7,23 @@ import (
 )
 
 type APIClient struct {
-	username  string
-	password  string
-	token     string
-	subdomain string
-	Client    *http.Client
+	username   string
+	password   string
+	token      string
+	subdomain  string
+	httpClient *http.Client
+
+	Client *ClientService
+	People *PersonService
 }
 
 func newAPIClient(subdomain string) (c *APIClient) {
 	c = new(APIClient)
 	c.subdomain = subdomain
-	c.Client = new(http.Client)
+	c.httpClient = new(http.Client)
+
+	c.Client = &ClientService{apiClient: c}
+	c.People = &PersonService{apiClient: c}
 	return
 }
 
@@ -34,34 +40,21 @@ func NewAPIClientWithAuthToken(token, subdomain string) (c *APIClient) {
 	return
 }
 
-func (c *APIClient) GetJSON(path string) (jsonResponse []byte) {
+func (c *APIClient) GetJSON(path string) (err error, jsonResponse []byte) {
 	resourceURL := fmt.Sprintf("http://%v.harvestapp.com%v", c.subdomain, path)
 	request, err := http.NewRequest("GET", resourceURL, nil)
-	perror(err)
+	if err != nil {
+		return
+	}
 
 	request.SetBasicAuth(c.username, c.password)
-	resp, err := c.Client.Do(request)
-	perror(err)
+	resp, err := c.httpClient.Do(request)
 	defer resp.Body.Close()
 
-	contents, err := ioutil.ReadAll(resp.Body)
-	perror(err)
-
-	return contents
-}
-
-func (c *APIClient) GetClients() (clients []Client) {
-	clients = GetClients(c)
-	return
-}
-
-func (c *APIClient) GetClient(clientID int) (client Client) {
-	client = GetClient(clientID, c)
-	return
-}
-
-func perror(err error) {
 	if err != nil {
-		panic(err)
+		return
 	}
+
+	jsonResponse, err = ioutil.ReadAll(resp.Body)
+	return
 }

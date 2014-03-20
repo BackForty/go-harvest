@@ -1,7 +1,9 @@
 package main
 
-import ("../harvest"
-        "fmt")
+import (
+	"../harvest"
+	"fmt"
+)
 
 func main() {
   apiClient := harvest.NewAPIClientWithBasicAuth("YOUR_USERNAME", "YOUR_PASSWORD", "YOUR_SUBDOMAIN")

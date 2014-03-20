@@ -7,16 +7,16 @@ import (
 )
 
 type Client struct {
-	Name                    string
-	Currency                string
-	Active                  bool
-	Id                      int32
-	HighriseId              int32
-	CreatedAt               time.Time
-	UpdatedAt               string
-	Details                 string
-	DefaultInvoiceTimeframe string
-	LastInvoiceKind         string
+	Name                    string    `json:"name"`
+	Currency                string    `json:"currency"`
+	Active                  bool      `json:"active"`
+	Id                      int       `json:"id"`
+	HighriseId              int       `json:"highrise_id"`
+	CreatedAt               time.Time `json:"created_at"`
+	UpdatedAt               time.Time `json:"created_at"`
+	Details                 string    `json:"details"`
+	DefaultInvoiceTimeframe string    `json:"default_invoice_timeframe"`
+	LastInvoiceKind         string    `json:"last_invoice_kind"`
 }
 
 type ClientResponse struct {
@@ -34,7 +34,7 @@ func GetClients(apiClient *APIClient) (clients []Client) {
 	return
 }
 
-func GetClient(clientID int32, apiClient *APIClient) Client {
+func GetClient(clientID int, apiClient *APIClient) Client {
 	resourceURL := fmt.Sprintf("/clients/%v.json", clientID)
 	contents := apiClient.GetJSON(resourceURL)
 

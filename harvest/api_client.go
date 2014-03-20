@@ -55,7 +55,7 @@ func (c *APIClient) GetClients() (clients []Client) {
 	return
 }
 
-func (c *APIClient) GetClient(clientID int32) (client Client) {
+func (c *APIClient) GetClient(clientID int) (client Client) {
 	client = GetClient(clientID, c)
 	return
 }

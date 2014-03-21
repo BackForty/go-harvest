@@ -10,12 +10,12 @@ func ExerciseClients(apiClient *harvest.APIClient) {
 	if err != nil {
 		fmt.Printf("\n%v\n", err)
 	} else {
-		fmt.Printf("%+v\n\n\n", clients)
+		fmt.Printf("\n%+v\n", clients)
 		err, client := apiClient.Client.Find(clients[0].Id)
 		if err != nil {
 			fmt.Printf("\n%v\n", err)
 		} else {
-			fmt.Printf("%v\n\n\n", client)
+			fmt.Printf("\n%v\n", client)
 		}
 	}
 }

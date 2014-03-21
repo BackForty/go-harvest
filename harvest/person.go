@@ -48,7 +48,11 @@ func (c *PersonService) List() (err error, people []Person) {
 	}
 
 	var personResponse []PersonResponse
-	json.Unmarshal(contents, &personResponse)
+	err = json.Unmarshal(contents, &personResponse)
+	if err != nil {
+		return
+	}
+
 	for _, element := range personResponse {
 		people = append(people, element.Person)
 	}
@@ -63,7 +67,11 @@ func (c *PersonService) Find(personID int) (err error, person Person) {
 	}
 
 	var personResponse PersonResponse
-	json.Unmarshal(contents, &personResponse)
+	err = json.Unmarshal(contents, &personResponse)
+	if err != nil {
+		return
+	}
+
 	person = personResponse.Person
 	return
 }

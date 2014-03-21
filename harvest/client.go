@@ -34,7 +34,11 @@ func (c *ClientService) List() (err error, clients []Client) {
 	}
 
 	var clientResponse []ClientResponse
-	json.Unmarshal(contents, &clientResponse)
+	err = json.Unmarshal(contents, &clientResponse)
+	if err != nil {
+		return
+	}
+
 	for _, element := range clientResponse {
 		clients = append(clients, element.Client)
 	}
@@ -49,7 +53,11 @@ func (c *ClientService) Find(clientID int) (err error, client Client) {
 	}
 
 	var clientResponse ClientResponse
-	json.Unmarshal(contents, &clientResponse)
+	err = json.Unmarshal(contents, &clientResponse)
+	if err != nil {
+		return
+	}
+
 	client = clientResponse.Client
 	return
 }

@@ -1,13 +1,12 @@
 package harvest
 
 import (
-	"encoding/json"
 	"fmt"
 	"time"
 )
 
 type ClientService struct {
-	apiClient *APIClient
+	Service
 }
 
 type Client struct {
@@ -28,17 +27,12 @@ type ClientResponse struct {
 }
 
 func (c *ClientService) List() (err error, clients []Client) {
-	err, contents := c.apiClient.GetJSON("/clients.json")
-	if err != nil {
-		return
-	}
-
+	resourceURL := "/clients.json"
 	var clientResponse []ClientResponse
-	err = json.Unmarshal(contents, &clientResponse)
+	err = c.list(resourceURL, &clientResponse)
 	if err != nil {
 		return
 	}
-
 	for _, element := range clientResponse {
 		clients = append(clients, element.Client)
 	}
@@ -47,17 +41,8 @@ func (c *ClientService) List() (err error, clients []Client) {
 
 func (c *ClientService) Find(clientID int) (err error, client Client) {
 	resourceURL := fmt.Sprintf("/clients/%v.json", clientID)
-	err, contents := c.apiClient.GetJSON(resourceURL)
-	if err != nil {
-		return
-	}
-
 	var clientResponse ClientResponse
-	err = json.Unmarshal(contents, &clientResponse)
-	if err != nil {
-		return
-	}
+	err = c.find(resourceURL, &clientResponse)
 
-	client = clientResponse.Client
-	return
+	return err, clientResponse.Client
 }

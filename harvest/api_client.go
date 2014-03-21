@@ -23,9 +23,9 @@ func newAPIClient(subdomain string) (c *APIClient) {
 	c.subdomain = subdomain
 	c.httpClient = new(http.Client)
 
-	c.Client = &ClientService{apiClient: c}
-	c.People = &PersonService{apiClient: c}
-	c.Project = &ProjectService{apiClient: c}
+	c.Client = &ClientService{Service{c}}
+	c.People = &PersonService{Service{c}}
+	c.Project = &ProjectService{Service{c}}
 	return
 }
 

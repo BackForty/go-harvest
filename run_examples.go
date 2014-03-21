@@ -12,7 +12,7 @@ func main() {
 		os.Getenv("HARVEST_PASSWORD"),
 		os.Getenv("HARVEST_DOMAIN"))
 
-	examples.ExerciseProjects(apiClient)
 	examples.ExerciseClients(apiClient)
 	examples.ExercisePeople(apiClient)
+	examples.ExerciseProjects(apiClient)
 }

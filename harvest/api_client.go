@@ -13,8 +13,9 @@ type APIClient struct {
 	subdomain  string
 	httpClient *http.Client
 
-	Client *ClientService
-	People *PersonService
+	Client  *ClientService
+	People  *PersonService
+	Project *ProjectService
 }
 
 func newAPIClient(subdomain string) (c *APIClient) {
@@ -24,6 +25,7 @@ func newAPIClient(subdomain string) (c *APIClient) {
 
 	c.Client = &ClientService{apiClient: c}
 	c.People = &PersonService{apiClient: c}
+	c.Project = &ProjectService{apiClient: c}
 	return
 }
 

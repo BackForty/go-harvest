@@ -1,9 +1,10 @@
 package main
 
 import (
+	"os"
+
 	"./examples"
 	"./harvest"
-	"os"
 )
 
 func main() {
@@ -13,6 +14,7 @@ func main() {
 		os.Getenv("HARVEST_DOMAIN"))
 
 	examples.ExerciseClients(apiClient)
+	examples.ExerciseInvoices(apiClient)
 	examples.ExercisePeople(apiClient)
 	examples.ExerciseProjects(apiClient)
 }

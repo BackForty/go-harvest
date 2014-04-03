@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"code.google.com/p/goauth2/oauth"
 )
 
 type APIClient struct {
 	username   string
 	password   string
-	token      string
 	subdomain  string
 	httpClient *http.Client
 
@@ -20,10 +21,15 @@ type APIClient struct {
 	Account *AccountService
 }
 
-func newAPIClient(subdomain string) (c *APIClient) {
+func newAPIClient(subdomain string, httpClient *http.Client) (c *APIClient) {
 	c = new(APIClient)
 	c.subdomain = subdomain
-	c.httpClient = new(http.Client)
+
+	if httpClient != nil {
+		c.httpClient = httpClient
+	} else {
+		c.httpClient = new(http.Client)
+	}
 
 	c.Client = &ClientService{Service{c}}
 	c.People = &PersonService{Service{c}}
@@ -34,15 +40,19 @@ func newAPIClient(subdomain string) (c *APIClient) {
 }
 
 func NewAPIClientWithBasicAuth(username, password, subdomain string) (c *APIClient) {
-	c = newAPIClient(subdomain)
+	c = newAPIClient(subdomain, nil)
 	c.username = username
 	c.password = password
 	return
 }
 
 func NewAPIClientWithAuthToken(token, subdomain string) (c *APIClient) {
-	c = newAPIClient(subdomain)
-	c.token = token
+	t := &oauth.Transport{
+		Token: &oauth.Token{AccessToken: token},
+	}
+
+	c = newAPIClient(subdomain, t.Client())
+
 	return
 }
 

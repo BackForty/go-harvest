@@ -53,12 +53,12 @@ func (c *APIClient) GetJSON(path string) (err error, jsonResponse []byte) {
 
 	request.SetBasicAuth(c.username, c.password)
 	resp, err := c.httpClient.Do(request)
-	defer resp.Body.Close()
 
 	if err != nil {
 		return
 	}
 
+	defer resp.Body.Close()
 	jsonResponse, err = ioutil.ReadAll(resp.Body)
 	return
 }
